@@ -8,6 +8,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
+import com.example.financa.data.GanhoRepository
+import com.example.financa.data.dao.GanhoDao
+import com.example.financa.data.entities.Ganho
 import com.example.financas.data.AppDatabase
 import com.example.financas.data.FinancaDao
 import com.example.financas.data.Financa
@@ -18,7 +21,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var db: AppDatabase
     private lateinit var dao: FinancaDao
+    private lateinit var ganhoDao: GanhoDao
     private lateinit var repository: FinancaRepository
+    private lateinit var ganhoRepository: GanhoRepository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +35,12 @@ class MainActivity : AppCompatActivity() {
             AppDatabase::class.java,
             "financa.db"
         ).build()
+
         dao = db.financaDao()
+        ganhoDao = db.ganhoDao()
+
         repository = FinancaRepository(db.financaDao())
+        ganhoRepository = GanhoRepository(ganhoDao)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -38,6 +48,27 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+//        lifecycleScope.launch {
+//            val ganho = Ganho(
+//                nome = "Salário",
+//                valor = 3000.00,
+//                data = "05/06/2025",
+//                recorrente = true
+//            )
+//            ganhoRepository.inserir(ganho)
+//        }
+
+
+        lifecycleScope.launch {
+            val todosGanhos = ganhoRepository.listar()
+            todosGanhos.forEach { ganho ->
+                Log.d(
+                    "GanhoLog",
+                    "ID: ${ganho.id}, Nome: ${ganho.nome}, Valor: R$${ganho.valor}, " +
+                            "Data: ${ganho.data}, Recorrente: ${ganho.recorrente}"
+                )
+            }
+        }
     }}
 
 /*

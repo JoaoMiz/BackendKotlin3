@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.financa.data.dao.GanhoDao
+import com.example.financa.data.entities.Ganho
 
-@Database(entities = [Financa::class], version = 1)
+@Database(entities = [Financa::class, Ganho::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun financaDao(): FinancaDao
+    abstract fun ganhoDao(): GanhoDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
@@ -18,7 +21,8 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "financas_db"
-                ).build().also { INSTANCE = it }
+                ).fallbackToDestructiveMigration()
+                 .build().also { INSTANCE = it }
             }
         }
     }
