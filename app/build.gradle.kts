@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -47,9 +48,22 @@ dependencies {
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.junit.ktx)
     ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
+    testImplementation("androidx.room:room-testing:2.6.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation ("org.mockito:mockito-core:5.11.0")
+    testImplementation ("org.mockito:mockito-inline:5.2.0")
+    testImplementation ("androidx.test:core:1.5.0")
+
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    testImplementation( "io.mockk:mockk:1.13.7")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test:1.9.0")
+
 }
